@@ -11,6 +11,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.wangmiao.teamdemo01.R;
+import com.example.wangmiao.teamdemo01.Utils.NetUtils;
+
+import java.io.InputStream;
 
 
 /**
@@ -19,7 +22,7 @@ import com.example.wangmiao.teamdemo01.R;
 public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefreshListener {
     private SwipeRefreshLayout swapRefreshLayout;
     private RecyclerView recyclerView;
-    private String path;
+    private String path="http://www.1zhebaoyou.com/apptools/productlist.aspx?act=getproductlist&pages=1&bc=0&sc=0&sorts=&channel=0&ckey=&daynews=&lprice=0&hprice=0&tbclass=0&actid=0&brandid=0&predate=2016-10-31+17%3A07%3A05&index=1&v=35";
     private MyAdapter myAdapter;
 
 
@@ -53,6 +56,10 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     private void getDataFromNet(String path) {
+        InputStream inputStreamFromNet = NetUtils.getInputStreamFromNet(path);
+        String data = NetUtils.inputStreamToString(inputStreamFromNet);
+
+
 
     }
     private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder>{
