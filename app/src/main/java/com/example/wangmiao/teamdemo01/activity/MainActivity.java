@@ -1,15 +1,25 @@
 package com.example.wangmiao.teamdemo01.activity;
 
+import android.content.Intent;
 import android.os.SystemClock;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.example.wangmiao.teamdemo01.R;
+import com.example.wangmiao.teamdemo01.fragment.InFragment_one;
+import com.example.wangmiao.teamdemo01.fragment.InFragment_three;
+import com.example.wangmiao.teamdemo01.fragment.InFragment_two;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,7 +32,11 @@ public class MainActivity extends AppCompatActivity {
      */
     private ImageView[] imageView_icons;
 
+    private List<Fragment> fragments;
+
     private int prePosition;
+
+    private Button button_in;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,8 +49,68 @@ public class MainActivity extends AppCompatActivity {
 
     private void initData() {
 
+        this.fragments = new ArrayList<>();
+        InFragment_one inFragment_one = new InFragment_one();
+        InFragment_two inFragment_two = new InFragment_two();
+        InFragment_three inFragment_three = new InFragment_three();
+
+        fragments.add(inFragment_one);
+        fragments.add(inFragment_two);
+        fragments.add(inFragment_three);
+
+        this.viewPager_in.setAdapter(new MyPagerAdapter(getSupportFragmentManager()));
+
+        //linearLayout_icons.getChildCount():获取线性布局中的子元素个数i
+        int count=this.linerLayout_icon.getChildCount();
+        this.imageView_icons=new ImageView[count];
+        for(int i=0;i<count;i++){
+            ImageView imageView_icon=(ImageView) this.linerLayout_icon.getChildAt(i);
+            //给ImageView设置一个标志值
+            //imageView_icon.setTag(i);
+
+            imageView_icon.setId(i);
+            imageView_icon.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // int currentItem=Integer.parseInt(v.getTag().toString());
+                    //设置ViewPager切换到指定页面
+                    //viewPager.setCurrentItem(currentItem);
+
+                    viewPager_in.setCurrentItem(v.getId());
+                }
+            });
+
+            this.imageView_icons[i]=imageView_icon ;
+        }
+
     }
 
+    /**
+     * 自定义适配器对象
+     *
+     * @author dell
+     *
+     */
+    private final class MyPagerAdapter extends FragmentPagerAdapter {
+
+        public MyPagerAdapter(FragmentManager fm) {
+            super(fm);
+            // TODO Auto-generated constructor stub
+        }
+
+        @Override
+        public Fragment getItem(int position) {
+            // TODO Auto-generated method stub
+            return fragments.get(position);
+        }
+
+        @Override
+        public int getCount() {
+            // TODO Auto-generated method stub
+            return fragments.size();
+        }
+
+    }
     @Override
     protected void onResume() {
         super.onResume();
