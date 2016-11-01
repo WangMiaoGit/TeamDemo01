@@ -14,7 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.wangmiao.teamdemo01.R;
-import com.example.wangmiao.teamdemo01.Utils.NetUtils;
+import com.example.wangmiao.teamdemo01.utils.NetUtils;
 import com.example.wangmiao.teamdemo01.domain.Home_Clothes;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
