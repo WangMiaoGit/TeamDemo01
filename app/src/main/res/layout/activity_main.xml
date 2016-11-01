@@ -30,22 +30,22 @@
             android:id="@+id/linerLayout_icon">
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="28dp"
                 android:src="@drawable/radio_on"
                 />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="28dp"
                 android:src="@drawable/radio_off"
                 />
 
             <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:layout_marginLeft="28dp"
                 android:src="@drawable/radio_off"
                 />
