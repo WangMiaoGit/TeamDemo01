@@ -2,10 +2,10 @@ package com.example.wangmiao.teamdemo01.activity;
 
 import android.os.Bundle;
 import android.support.v4.app.FragmentTabHost;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.view.Window;
 import android.widget.ImageView;
 import android.widget.TabHost;
 import android.widget.TextView;
@@ -26,10 +26,13 @@ public class IndexActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        //requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_index);
+        ActionBar supportActionBar = getSupportActionBar();
+        if(supportActionBar.isShowing()){
+            supportActionBar.hide();
+        }
         initView();
-
     }
 
     private void initView() {
@@ -38,7 +41,6 @@ public class IndexActivity extends AppCompatActivity {
         for(int i=0;i<fragmentArray.length;i++){
             TabHost.TabSpec tabSpec = tabhost.newTabSpec(tabSpecText[i]).setIndicator(getTabItemView(i));
             tabhost.addTab(tabSpec,fragmentArray[i],null);
-
         }
 
     }

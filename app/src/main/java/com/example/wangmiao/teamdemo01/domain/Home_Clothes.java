@@ -19,6 +19,19 @@ public class Home_Clothes {
     }
 
     public static class RowsEntity {
+        @Override
+        public String toString() {
+            return "RowsEntity{" +
+                    "Discount=" + Discount +
+                    ", IsBaoYou=" + IsBaoYou +
+                    ", Name='" + Name + '\'' +
+                    ", NewPrice=" + NewPrice +
+                    ", OldPrice=" + OldPrice +
+                    ", ProductImg='" + ProductImg + '\'' +
+                    ", SaleTotal=" + SaleTotal +
+                    '}';
+        }
+
         /**
          * Discount : 2.2
          * Id : 1412230
@@ -42,7 +55,7 @@ public class Home_Clothes {
         private int IsBaoYou;
         private String Name;
         private double NewPrice;
-        private int OldPrice;
+        private double OldPrice;
         private String ProductImg;
         private int SaleTotal;
 
@@ -90,7 +103,7 @@ public class Home_Clothes {
             return NewPrice;
         }
 
-        public int getOldPrice() {
+        public double getOldPrice() {
             return OldPrice;
         }
 

@@ -5,15 +5,17 @@
     android:orientation="vertical">
 
     <ImageView
+        android:layout_marginRight="2dp"
         android:scaleType="fitXY"
         android:src="@mipmap/ic_launcher"
         android:id="@+id/imageView_home"
-        android:layout_width="120dp"
-        android:layout_height="100dp" />
+        android:layout_width="100dp"
+        android:layout_height="80dp" />
 
     <TextView
-        android:id="@+id/textview_title"
-        android:textSize="15dp"
+        android:textColor="#3a3a3a"
+        android:id="@+id/textView_title"
+        android:textSize="10dp"
         android:text="长袖t恤 春秋女2016秋装新款修身打底衫韩版圆领女装蕾丝上衣潮"
         android:layout_marginBottom="5dp"
         android:layout_toRightOf="@id/imageView_home"
@@ -25,40 +27,44 @@
         android:layout_marginRight="14dp"
         android:id="@+id/textView_newPrice"
         android:layout_toRightOf="@id/imageView_home"
-        android:layout_below="@id/textview_title"
-        android:textSize="15dp"
+        android:layout_below="@id/textView_title"
+        android:textSize="10dp"
         android:text="¥11"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:layout_below="@id/textview_title"
+        android:layout_below="@id/textView_title"
         android:layout_toRightOf="@id/textView_newPrice"
         android:id="@+id/textView_oldPrice"
-        android:textSize="15dp"
+        android:textSize="10dp"
         android:text="原价¥110.00"
+        android:textColor="@android:color/darker_gray"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:layout_marginRight="30dp"
+        android:layout_marginRight="35dp"
         android:id="@+id/textView_discount"
         android:layout_below="@id/textView_newPrice"
         android:layout_toRightOf="@id/imageView_home"
         android:layout_marginTop="16dp"
-        android:textSize="15dp"
+        android:textSize="8dp"
         android:text="2.2折"
+        android:textColor="@android:color/darker_gray"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
     <TextView
-        android:layout_marginRight="30dp"
+        android:layout_marginRight="45dp"
         android:layout_toRightOf="@id/textView_discount"
         android:layout_marginTop="16dp"
         android:layout_below="@id/textView_newPrice"
         android:id="@+id/textView_saleTotal"
-        android:textSize="15dp"
+        android:textSize="8dp"
         android:text="已售211件"
+        android:textColor="@android:color/darker_gray"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
@@ -67,8 +73,11 @@
         android:id="@+id/textView_isBaoyou"
         android:layout_marginTop="16dp"
         android:layout_below="@id/textView_newPrice"
-        android:textSize="15dp"
+        android:textSize="8dp"
         android:text="包邮"
+        android:textColor="@android:color/darker_gray"
+        android:layout_alignParentRight="true"
+        android:paddingRight="3dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
