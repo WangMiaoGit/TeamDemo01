@@ -22,7 +22,7 @@
             android:textColor="#3a3a3a"
             android:id="@+id/textView_title"
             android:textSize="10dp"
-            android:text="长袖t恤 春秋女2016秋装新款修身打底衫韩版圆领女装蕾丝上衣潮"
+            android:text="长袖t恤春秋女2016秋装新款修身打底衫韩版圆领女装蕾丝上衣潮"
             android:layout_marginBottom="5dp"
             android:layout_toRightOf="@id/imageView_home"
             android:layout_width="wrap_content"

@@ -1,5 +1,7 @@
 package com.example.wangmiao.teamdemo01.domain;
 
+import com.google.gson.Gson;
+
 import java.util.List;
 
 /**
@@ -10,6 +12,11 @@ public class Home_Clothes {
 
     private List<RowsEntity> rows;
 
+    public static Home_Clothes objectFromData(String str) {
+
+        return new Gson().fromJson(str, Home_Clothes.class);
+    }
+
     public void setRows(List<RowsEntity> rows) {
         this.rows = rows;
     }
@@ -19,34 +26,21 @@ public class Home_Clothes {
     }
 
     public static class RowsEntity {
-        @Override
-        public String toString() {
-            return "RowsEntity{" +
-                    "Discount=" + Discount +
-                    ", IsBaoYou=" + IsBaoYou +
-                    ", Name='" + Name + '\'' +
-                    ", NewPrice=" + NewPrice +
-                    ", OldPrice=" + OldPrice +
-                    ", ProductImg='" + ProductImg + '\'' +
-                    ", SaleTotal=" + SaleTotal +
-                    '}';
-        }
-
         /**
-         * Discount : 2.2
-         * Id : 1412230
+         * Discount : 3.288591
+         * Id : 1414595
          * IsBaoYou : 1
          * IsPromotion : 0
-         * Name : 卫衣女韩版潮学生加绒衫加厚宽松套头bf秋冬大码女装胖mm卡通外套
-         * NewPrice : 27.5
-         * OldPrice : 125
-         * PFrom : 1
-         * ProductImg : http://img03.taobaocdn.com/bao/uploaded/i3/TB12nrhNpXXXXbuXpXXXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg
-         * ProductImg1 : http://img03.taobaocdn.com/bao/uploaded/i3/TB12nrhNpXXXXbuXpXXXXXXXXXX_!!0-item_pic.jpg_430x430q90.jpg
-         * ProductImgWX : http://img.1zhebaoyou.com/upload/product/2016-11/1/100201611011010431034.jpg
-         * ProductUrl : https://detail.tmall.com/item.htm?id=539040648338
-         * SaleTotal : 201
-         * SpreadUrl : http://s.click.taobao.com/t?e=m%3D2%26s%3DIkzTgEGdPQscQipKwQzePOeEDrYVVa64pRe%2F8jaAHci5VBFTL4hn2TjaLYD4QoyEByy0g7RzMQdDNjtY1PGMgTn640bzR4Te6D8fFF8ikCrcwARGI3VHcT9CkxSUF2Dnd78QKDC%2FVUV2RhcrhVoMPnEqY%2Bakgpmw
+         * Name : 秋冬装新款拼接卫衣女韩版宽松套头假两件上衣显瘦学生条纹衬衣潮
+         * NewPrice : 49
+         * OldPrice : 149
+         * PFrom : 2
+         * ProductImg : http://img1.tbcdn.cn/tfscom/i3/875806793/TB2uJ4FXA6z11Bjy0FoXXbvkpXa_!!875806793.jpg_430x430q90.jpg
+         * ProductImg1 : http://img1.tbcdn.cn/tfscom/i3/875806793/TB2uJ4FXA6z11Bjy0FoXXbvkpXa_!!875806793.jpg_430x430q90.jpg
+         * ProductImgWX : http://img.1zhebaoyou.com/upload/product/2016-11/3/100201611031006545179.jpg
+         * ProductUrl : https://item.taobao.com/item.htm?id=538494975608
+         * SaleTotal : 6593
+         * SpreadUrl : http://s.click.taobao.com/t?e=m%3D2%26s%3DU%2Bbm4a3udmkcQipKwQzePOeEDrYVVa64Qih%2F7PxfOKS5VBFTL4hn2VDr7OASNDu70e71iVTN2RxDNjtY1PGMgTn640bzR4Te6D8fFF8ikCp3etMdIZmyEqpCoirhh9LZ5PpBJ2eMlXNZpJGe%2BswIJyGFCzYOOqAQ
          * picHeight : 880
          * picWidth : 800
          */
@@ -57,7 +51,13 @@ public class Home_Clothes {
         private double NewPrice;
         private double OldPrice;
         private String ProductImg;
+        private String ProductUrl;
         private int SaleTotal;
+
+        public static RowsEntity objectFromData(String str) {
+
+            return new Gson().fromJson(str, RowsEntity.class);
+        }
 
         public void setDiscount(double Discount) {
             this.Discount = Discount;
@@ -71,7 +71,7 @@ public class Home_Clothes {
             this.Name = Name;
         }
 
-        public void setNewPrice(double NewPrice) {
+        public void setNewPrice(int NewPrice) {
             this.NewPrice = NewPrice;
         }
 
@@ -81,6 +81,10 @@ public class Home_Clothes {
 
         public void setProductImg(String ProductImg) {
             this.ProductImg = ProductImg;
+        }
+
+        public void setProductUrl(String ProductUrl) {
+            this.ProductUrl = ProductUrl;
         }
 
         public void setSaleTotal(int SaleTotal) {
@@ -111,15 +115,12 @@ public class Home_Clothes {
             return ProductImg;
         }
 
+        public String getProductUrl() {
+            return ProductUrl;
+        }
+
         public int getSaleTotal() {
             return SaleTotal;
         }
-    }
-
-    @Override
-    public String toString() {
-        return "Home_Clothes{" +
-                "rows=" + rows +
-                '}';
     }
 }

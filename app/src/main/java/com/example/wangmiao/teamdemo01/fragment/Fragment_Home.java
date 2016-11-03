@@ -1,6 +1,7 @@
 package com.example.wangmiao.teamdemo01.fragment;
 
 
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.Bundle;
 import android.os.Handler;
@@ -10,18 +11,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.wangmiao.teamdemo01.R;
-import com.example.wangmiao.teamdemo01.Utils.NetUtils;
+import com.example.wangmiao.teamdemo01.utils.NetUtils;
+import com.example.wangmiao.teamdemo01.activity.HomeItemActivity;
+import com.example.wangmiao.teamdemo01.activity.HomeSearchActivity;
+import com.example.wangmiao.teamdemo01.adapter.HomeAdapter;
 import com.example.wangmiao.teamdemo01.domain.Home_Clothes;
 import com.google.gson.Gson;
 import com.squareup.picasso.Picasso;
@@ -34,18 +40,23 @@ import java.io.InputStream;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ViewPager.OnPageChangeListener {
+public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefreshListener, ViewPager.OnPageChangeListener, View.OnClickListener {
     private SwipeRefreshLayout swapRefreshLayout;
     private RecyclerView recyclerView;
+    private ImageView imageView_vertical;
+    private ImageView imageView_upward;
     private final String RECYCLE_PATH = "http://www.1zhebaoyou.com/apptools/productlist.aspx?act=getproductlist&pages=1&bc=0&sc=0&sorts=&channel=0&ckey=&daynews=&lprice=0&hprice=0&tbclass=0&actid=0&brandid=0&predate=2016-10-31+17%3A07%3A05&index=1&v=35";
     private final String VIEWPAGER_PATH="http://www.1zhebaoyou.com/apptools/indexad.aspx?v=35";
     private final String IMAGEVIEW_PATH="http://www.1zhebaoyou.com/apptools/app.aspx";
     private MyAdapter myAdapter;
+    private HomeAdapter homeAdapter;
     private List<Home_Clothes.RowsEntity> clothes;
     private ViewPagerAdapter viewPagerAdapter;
     private ViewPager viewPager;
@@ -53,13 +64,29 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
     private List<ImageView> imageViews_icon=new ArrayList<>();
     private LinearLayout linearLayout_icons;
     private int prePosition;
+    private int state;
+    private Button button_search;
     private ImageView imageView_super;
     private ImageView imageView_food;
     private ImageView imageView_round;
+    private int currentItem=0;
+    private LinearLayoutManager linearLayoutManager;
+    private GridLayoutManager gridLayoutManager;
     private ImageView[] imageViews=new ImageView[5];
     private Handler handler=new Handler(){
         @Override
         public void handleMessage(Message msg) {
+
+            int what = msg.what;
+            //System.out.println("what="+what);
+            if(what==1){
+                currentItem++;
+                if(currentItem==3){
+                    currentItem=0;
+                }
+                //System.out.println("currentItem="+currentItem);
+                viewPager.setCurrentItem(currentItem);
+            }
             ImageView imageView= (ImageView) msg.obj;
             String imageUrl = msg.getData().getString("url");
             if(imageView!=null){
@@ -67,7 +94,17 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
                         .into(imageView);
             }
             viewPagerAdapter.notifyDataSetChanged();
-            Picasso.with(getActivity()).load(msg.getData().getString("url2")).into(imageViews_three.get(msg.arg1));
+
+        }
+    };
+    private Handler handler2=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            String url2 = msg.getData().getString("url2");
+            int arg1 = msg.arg1;
+
+            Picasso.with(getActivity()).load(url2).into(imageViews_three.get(arg1));
         }
     };
 
@@ -80,16 +117,61 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
     }
 
     private void initView(View view) {
+        this.button_search= (Button) view.findViewById(R.id.button_search);
+        this.imageView_upward= (ImageView) view.findViewById(R.id.imageView_upward);
+        this.imageView_vertical= (ImageView) view.findViewById(R.id.imageView_vertical);
         this.swapRefreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.swapRefreshLayout);
         this.recyclerView = (RecyclerView) view.findViewById(R.id.recyclerView);
         clothes = new ArrayList<>();
         swapRefreshLayout.setOnRefreshListener(this);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        button_search.setOnClickListener(this);
+        this.gridLayoutManager=new GridLayoutManager(getActivity(),2);
+        this.linearLayoutManager = new LinearLayoutManager(getActivity());
         linearLayoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(linearLayoutManager);
         View headerView = LayoutInflater.from(getActivity()).inflate(R.layout.home_headview, null);
         this.myAdapter = new MyAdapter(headerView);
+        //this.homeAdapter=new HomeAdapter(this,clothes);
         recyclerView.setAdapter(myAdapter);
+        myAdapter.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void getData(String url) {
+                Intent intent = new Intent(getActivity(), HomeItemActivity.class);
+                intent.putExtra("url",url);
+                startActivity(intent);
+            }
+        });
+        Timer timer=new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.sendEmptyMessage(1);
+            }
+        },1000,5000);
+        recyclerView.setOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                state=newState;
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                System.out.println("state="+state);
+                if (state!=RecyclerView.SCROLL_STATE_IDLE){
+                    imageView_vertical.setVisibility(View.GONE);
+                    imageView_upward.setVisibility(View.GONE);
+
+                }else {
+
+                    imageView_vertical.setVisibility(View.VISIBLE);
+                    imageView_upward.setVisibility(View.VISIBLE);
+                }
+
+            }
+        });
+
+        imageView_vertical.setOnClickListener(this);
+        imageView_upward.setOnClickListener(this);
         /*getDataFromNet(RECYCLE_PATH);
         myAdapter.notifyDataSetChanged();*/
         this.viewPager= (ViewPager) headerView.findViewById(R.id.viewPager);
@@ -129,6 +211,7 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
         getDataFromNet(VIEWPAGER_PATH);
         getDataFromNet(IMAGEVIEW_PATH);
         myAdapter.notifyDataSetChanged();
+        //homeAdapter.notifyDataSetChanged();
         viewPagerAdapter.notifyDataSetChanged();
         swapRefreshLayout.setRefreshing(false);
     }
@@ -147,11 +230,11 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
                            JSONArray jsonArray = null;
                            try {
                                jsonArray = new JSONArray(data);
-                               System.out.println("size="+jsonArray.length());
+                               //System.out.println("size="+jsonArray.length());
                                for(int i=0;i<jsonArray.length();i++){
                                    JSONObject jsonObject= (JSONObject) jsonArray.get(i);
                                    String imgUrl = jsonObject.getString("imgUrl");
-                                   Message message = Message.obtain(handler);
+                                   Message message = Message.obtain(handler2);
                                    Bundle bundle = new Bundle();
                                    bundle.putString("url2",imgUrl);
                                    message.arg1=i;
@@ -240,6 +323,30 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
 
     }
 
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        switch (id){
+            case R.id.imageView_vertical:
+                RecyclerView.LayoutManager layoutManager = recyclerView.getLayoutManager();
+                if (layoutManager==linearLayoutManager){
+                    recyclerView.setLayoutManager(gridLayoutManager);
+                }else {
+                    recyclerView.setLayoutManager(linearLayoutManager);
+                }
+                break;
+            case R.id.imageView_upward:
+                recyclerView.scrollToPosition(0);
+                break;
+            case R.id.button_search:
+                String data = button_search.getText().toString();
+                Intent intent = new Intent(getActivity(), HomeSearchActivity.class);
+                intent.putExtra("data",data);
+                startActivity(intent);
+                break;
+        }
+    }
+
     private class ViewPagerAdapter extends PagerAdapter{
         @Override
         public void destroyItem(ViewGroup container, int position, Object object) {
@@ -254,7 +361,7 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
 
         @Override
         public int getCount() {
-            System.out.println("size="+imageViews.length);
+            //System.out.println("size="+imageViews.length);
             return imageViews.length;
         }
 
@@ -263,12 +370,20 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
             return view==object;
         }
     }
+    interface OnItemClickListener{
+        void getData(String url);
+    }
 
-    private class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+    public  class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         private final int TYPE_HEAD = 1;
         private final int TYPE_ITEM = 0;
-        private android.view.View headerView;
+        public void setOnItemClickListener(OnItemClickListener onItemClickListener) {
+            this.onItemClickListener = onItemClickListener;
+        }
 
+        private OnItemClickListener onItemClickListener;
+        //private final int TYPE_GRID=3;
+        private android.view.View headerView;
         public MyAdapter(android.view.View headerView) {
             this.headerView = headerView;
         }
@@ -276,22 +391,23 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = null;
-            switch (viewType) {
-                case TYPE_HEAD:
-                    view = headerView;
-                    break;
-                case TYPE_ITEM:
-                    view = LayoutInflater.from(getActivity()).inflate(R.layout.home_item, null);
-            }
+                switch (viewType) {
+                    case TYPE_HEAD:
+                        view = headerView;
+                        break;
+                    case TYPE_ITEM:
+                        view = LayoutInflater.from(getActivity()).inflate(R.layout.home_item, null);
+                }
+
             MyViewHolder myViewHolder = new MyViewHolder(view, viewType);
-            System.out.println("myViewHolder=" + myViewHolder);
+            //System.out.println("myViewHolder=" + myViewHolder);
             return myViewHolder;
         }
 
         @Override
         public int getItemViewType(int position) {
             int type = TYPE_ITEM;
-            System.out.println("position=" + position);
+            //System.out.println("position=" + position);
             if (position == 0) {
                 type = TYPE_HEAD;
             } else {
@@ -302,6 +418,7 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
 
         @Override
         public void onBindViewHolder(MyViewHolder holder, int position) {
+            final int po=position;
             int itemViewType = getItemViewType(position);
             switch (itemViewType) {
                 case TYPE_HEAD:
@@ -310,7 +427,7 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
                     break;
                 case TYPE_ITEM:
                     Home_Clothes.RowsEntity rowsEntity = clothes.get(position);
-                    System.out.println("position=" + position);
+                    //System.out.println("position=" + position);
                     //System.out.println("rowsEntity="+rowsEntity);
                     if (rowsEntity != null) {
                         //System.out.println("name=" + rowsEntity.getName());
@@ -339,6 +456,15 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
                     }
                     break;
             }
+            holder.itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Home_Clothes.RowsEntity rowsEntity = clothes.get(po);
+                    String url = rowsEntity.getProductUrl();
+                    onItemClickListener.getData(url);
+                }
+            });
+
 
 
         }
@@ -361,23 +487,26 @@ public class Fragment_Home extends Fragment implements SwipeRefreshLayout.OnRefr
 
             public MyViewHolder(View itemView, int viewType) {
                 super(itemView);
-                switch (viewType) {
-                    case TYPE_HEAD:
-                        this.viewPager= (ViewPager) itemView.findViewById(R.id.viewPager);
-                        break;
-                    case TYPE_ITEM:
-                        //System.out.println("view=" + itemView);
-                        this.imageView_home = (ImageView) itemView.findViewById(R.id.imageView_home);
-                        this.textView_title = (TextView) itemView.findViewById(R.id.textView_title);
-                        this.textView_discount = (TextView) itemView.findViewById(R.id.textView_discount);
-                        this.textView_isBaoyou = (TextView) itemView.findViewById(R.id.textView_isBaoyou);
-                        this.textView_newPrice = (TextView) itemView.findViewById(R.id.textView_newPrice);
-                        this.textView_oldPrice = (TextView) itemView.findViewById(R.id.textView_oldPrice);
-                        this.textView_saleTotal = (TextView) itemView.findViewById(R.id.textView_saleTotal);
-                        break;
-                }
+                   switch (viewType) {
+                       case TYPE_HEAD:
+                           this.viewPager= (ViewPager) itemView.findViewById(R.id.viewPager);
+                           break;
+                       case TYPE_ITEM:
+                           //System.out.println("view=" + itemView);
+                           this.imageView_home = (ImageView) itemView.findViewById(R.id.imageView_home);
+                           this.textView_title = (TextView) itemView.findViewById(R.id.textView_title);
+                           this.textView_discount = (TextView) itemView.findViewById(R.id.textView_discount);
+                           this.textView_isBaoyou = (TextView) itemView.findViewById(R.id.textView_isBaoyou);
+                           this.textView_newPrice = (TextView) itemView.findViewById(R.id.textView_newPrice);
+                           this.textView_oldPrice = (TextView) itemView.findViewById(R.id.textView_oldPrice);
+                           this.textView_saleTotal = (TextView) itemView.findViewById(R.id.textView_saleTotal);
+                           break;
+                   }
+               }
 
             }
         }
     }
-}
+
+
+
