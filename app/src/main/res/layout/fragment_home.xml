@@ -1,21 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent" >
 
     <RelativeLayout
+        android:id="@+id/relativeLayout_home"
         android:background="#d61a3b"
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="48dp">
+        android:layout_height="40dp">
         <Button
             android:layout_gravity="center|left"
             android:background="@drawable/search"
             android:id="@+id/button_search"
-            android:layout_width="wrap_content"
+            android:layout_width="40dp"
             android:layout_height="wrap_content" />
         <TextView
+            android:textColor="#ffffff"
             android:layout_centerInParent="true"
             android:textSize="18sp"
             android:layout_gravity="center"
@@ -24,16 +26,37 @@
             android:layout_height="wrap_content" />
     </RelativeLayout>
     <android.support.v4.widget.SwipeRefreshLayout
+        android:layout_below="@id/relativeLayout_home"
         android:id="@+id/swapRefreshLayout"
         android:orientation="vertical"
         android:layout_width="match_parent"
+        android:layout_height="wrap_content"></android.support.v4.widget.SwipeRefreshLayout>
+    <RelativeLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
         </android.support.v7.widget.RecyclerView>
-    </android.support.v4.widget.SwipeRefreshLayout>
 
-</LinearLayout>
+        <ImageView
+            android:layout_marginRight="40dp"
+            android:layout_marginBottom="100dp"
+            android:id="@+id/imageView_vertical"
+
+            android:layout_alignParentRight="true"
+            android:background="@drawable/vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+        <ImageView
+            android:layout_below="@id/imageView_vertical"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/upward"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
+    </RelativeLayout>
+
+</RelativeLayout>
